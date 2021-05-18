@@ -1,14 +1,39 @@
-const http = require('http');
+var app = require("express")()
+var http = require("http").createServer(app)
+var io = require("socket.io")(http)
+const {addUser, removeUser} = require('./users')
 
-const hostname = '127.0.0.1';
-const port = 3000;
+app.get("/", function (req, res) {
+  res.sendFile(__dirname + "/index.html")
+})
+let thisRoom = ""
+io.on("connection", function (socket) {
+  console.log("connected")
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+  socket.on("join room", (data) => {
+    console.log("in room")
+    let newUser = addUser(socket.id, data.username, data.roomName)
+    
+    socket.emit("send data", {id : socket.id, username : newUser.userName, roomname : newUser.roomName})
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+    thisRoom = newUser.roomName
+    console.log(newUser)
+    socket.join(newUser.roomName)
+  })
+
+  socket.on("chat message", (data) => {
+    io.to(thisRoom).emit("chat message", {data : data, id : socket.id})
+  })
+
+  socket.on("disconnect", () => {
+    const user = removeUser(socket.id)
+    console.log(user)
+    if(user) {
+      console.log(user.username + ' has left')
+    }
+    console.log("disconnected")
+
+  });
+})
+
+http.listen(3000)
