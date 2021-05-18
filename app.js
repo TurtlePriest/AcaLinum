@@ -3,8 +3,8 @@ var http = require("http").createServer(app)
 var io = require("socket.io")(http)
 const {addUser, removeUser} = require('./users')
 
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/index.html")
+app.get("/chat", function (req, res) {
+  res.sendFile(__dirname + "/chat.html")
 })
 let thisRoom = ""
 io.on("connection", function (socket) {
