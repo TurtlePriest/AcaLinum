@@ -2,15 +2,17 @@ var app = require("express")()
 var http = require("http").createServer(app)
 var io = require("socket.io")(http)
 const {addUser, removeUser} = require('./users')
+const {addPost, removePost} = require('./posts')
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html")
-  
 })
 app.get("/chat", function (req, res) {
   res.sendFile(__dirname + "/chat.html")
 })
-
+app.get("/post", function (req, res) {
+  res.sendFile(__dirname + "/post.html")
+})
 
 let thisRoom = ""
 io.on("connection", function (socket) {

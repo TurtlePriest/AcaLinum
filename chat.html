@@ -1,3 +1,16 @@
+<head>
+  <title>AcaLinum - Chat</title>
+</head>
+<style>
+  div {
+    position:relative; left: 40%; top: 30%;
+    width: 200px;
+    border: 15px;
+    padding: 50px;
+    margin: 20px;
+    background-color:skyblue;
+  }
+</style>
 <body>
     <form>
         <input type="text" id="message" />
@@ -20,7 +33,6 @@
     })
 
     document.getElementById('message').focus()
-    //when form is submitted, capture the input value and then send it to server
     document
       .getElementsByTagName("form")[0]
       .addEventListener("submit", function (event) {
@@ -29,14 +41,14 @@
           value: document.getElementById("message").value,
           user: userName,
         
-        });
+        })
 
         document.getElementById("message").value = ""
-      });
+      })
  socket.on("chat message", (data) => {
       console.log(data.data.user + ": " + data.id)
         displayMessage(data)
-    });
+    })
 
 function displayMessage(data) {
         let authorClass = ""
