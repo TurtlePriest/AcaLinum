@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: g5-acalinum-deployment
+  labels:
+    app: g5-acalinum
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: g5-acalinum
+  template:
+    metadata:
+      labels:
+        app: g5-acalinum
+    spec:
+      containers:
+      - name: server
+        image: turtlepriest/acalinum
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: g5-acalinum-service
+spec:
+  selector:
+    app: g5-acalinum
+  ports:
+    - protocol: TCP
+      port: 3000
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: g5-acalinum
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  namespace: group5
+spec:
+  rules:
+   - http:
+      paths:
+      - backend:
+          serviceName: g5-acalinum-service
+          servicePort: 3000
+        path: /acalinum

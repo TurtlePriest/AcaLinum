@@ -2,16 +2,19 @@
   <title>AcaLinum - Chat</title>
 </head>
 <style>
-  div {
-    position:relative; left: 40%; top: 30%;
-    width: 200px;
-    border: 15px;
-    padding: 50px;
+     div {
+    width: 325px;
+    border: 5px;
+    padding: 10px;
     margin: 20px;
-    background-color:skyblue;
+    background-color:wheat;
+  }
+    li{
+      list-style-type:none
   }
 </style>
 <body>
+  <nav id="nav01"></nav>
     <form>
         <input type="text" id="message" />
         <input type="submit" id="submitButton" value="submit" />
@@ -67,7 +70,7 @@ function displayMessage(data) {
       div.innerHTML =
         '<p class="' +
         authorClass +
-        '">' +
+        '" style= "font-weight:bold; font-size:16px">' +
         data.data.user +
         "</p>" +
         '<p class="message"> ' +
@@ -78,4 +81,9 @@ function displayMessage(data) {
       document.getElementById("messages").appendChild(li)
       window.scrollTo(0, document.body.scrollHeight)
     }
+
+    document.getElementById("nav01").innerHTML =
+"<ul id='menu'>" +
+"<li><a href='/'>Home</a></li>" +
+"</ul>"
 </script>

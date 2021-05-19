@@ -33,6 +33,18 @@ io.on("connection", function (socket) {
     io.to(thisRoom).emit("chat message", {data : data, id : socket.id})
   })
 
+
+  socket.on("create post", (data) => {
+    console.log("post created")
+    let newPost = addPost(socket.id, data.username)
+    socket.emit("send post data", {id : socket.id, username : newPost.userName})
+
+  })
+
+  socket.on("post", (data) => {
+    io.sockets.emit("post", {data : data, id : socket.id})
+  })
+
   socket.on("disconnect", () => {
     const user = removeUser(socket.id)
     console.log(user)
