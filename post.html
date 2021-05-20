@@ -4,7 +4,7 @@
     <title>AcaLinum - Posts</title>
   </head>
 <style>
-    div {
+    .postDiv {
     position:relative; left: 40%; top: 30%;
     width: 300px;
     border: 15px;
@@ -69,7 +69,7 @@
         divClass = "yourDiv"
       }
       const div = document.createElement("div")
-      div.className = divClass;
+      div.className = "postDiv";
       const li = document.createElement("li")
       div.innerHTML =
         '<p class="' +
@@ -79,10 +79,64 @@
         "</p>" +
         '<p class="message"> ' +
         data.data.value +
-        "</p>";
+        "</p>" + 
+        "<hr style= 'border: 1.5px solid black'>" +
+        "<ul id='comments'></ul>" +
+        "<form>" + 
+          "<input type='text' id='postComment' />" + 
+          "<input type='button' id='commentButton' value='submit' />" +
+        "</form>";
       li.appendChild(div)
 
       document.getElementById("posts").appendChild(li)
+      window.scrollTo(0, document.body.scrollHeight)
+
+    }
+
+    document
+      .addEventListener("click", function (event) {
+        if (event.target && event.target.id == "commentButton") {
+          console.log("clicked!")
+        socket.emit("comment", {
+          value: document.getElementById("postComment").value,
+          user: userName,
+        
+        })
+        document.getElementById("postComment").value = "" 
+        }
+
+      })
+
+      socket.on("comment", (data) => {
+      console.log(data.data.user + ": " + data.id)
+        displayComment(data)
+    })
+
+    function displayComment(data) {
+        let authorClass = ""
+      let divClass = ""
+      if (data.id === ID) {
+        authorClass = "me"
+        divClass = "myDiv"
+      } else {
+        authorClass = "you"
+        divClass = "yourDiv"
+      }
+      const div = document.createElement("div")
+      div.className = divClass;
+      const li = document.createElement("li")
+      div.innerHTML =
+        '<p class="' +
+        authorClass +
+        '" style= "font-weight:bold; font-size:16px">' +
+        data.data.user +
+        "</p>" +
+        '<p class="message"> ' +
+        data.data.value +
+        "</p>";
+      li.appendChild(div)
+
+      document.getElementById("comments").appendChild(li)
       window.scrollTo(0, document.body.scrollHeight)
     }
 

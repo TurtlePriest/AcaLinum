@@ -44,6 +44,10 @@ io.on("connection", function (socket) {
   socket.on("post", (data) => {
     io.sockets.emit("post", {data : data, id : socket.id})
   })
+  socket.on("comment", (data) => {
+    console.log("here3")
+    io.sockets.emit("comment", {data : data, id : socket.id})
+  })
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id)
