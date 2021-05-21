@@ -1,9 +1,10 @@
 let posts = []
 
-function addPost(postId, userName) {
+function addPost(message, userName, id) {
     const post = {
-        postID: postId,
+        message: message,
         username: userName,
+        ID: id
     }
     posts.push(post)
     return post

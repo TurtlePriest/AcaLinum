@@ -1,8 +1,22 @@
 var app = require("express")()
 var http = require("http").createServer(app)
 var io = require("socket.io")(http)
+var mysql = require("mysql")
 const {addUser, removeUser} = require('./users')
 const {addPost, removePost} = require('./posts')
+
+var con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'admin',
+})
+con.connect(function(err) {
+  if (err) {
+    return console.error('error: ' + err.message);
+  }
+
+  console.log('Connected to the MySQL server.');
+});
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html")
@@ -34,18 +48,12 @@ io.on("connection", function (socket) {
   })
 
 
-  socket.on("create post", (data) => {
-    console.log("post created")
-    let newPost = addPost(socket.id, data.username)
-    socket.emit("send post data", {id : socket.id, username : newPost.userName})
-
-  })
-
   socket.on("post", (data) => {
+    let newPost = addPost(data.value, data.user, data.id)
+    console.log(newPost)
     io.sockets.emit("post", {data : data, id : socket.id})
   })
   socket.on("comment", (data) => {
-    console.log("here3")
     io.sockets.emit("comment", {data : data, id : socket.id})
   })
 

@@ -29,14 +29,10 @@
     let userName = prompt("Choose your name")
     let ID = ""
     var socket = io()
+    var cIndex = 0
+    var pIndex = 0
+    var bIndex = 0
 
-    socket.emit("create post", {username : userName})
-
-
-    socket.on("send post data", (data) => {
-        ID = data.id
-        console.log("My ID: " + ID)
-    })
 
     document.getElementById('postMessage').focus()
     document
@@ -46,6 +42,7 @@
         socket.emit("post", {
           value: document.getElementById("postMessage").value,
           user: userName,
+          id: pIndex
         
         })
 
@@ -53,23 +50,14 @@
       })
 
       socket.on("post", (data) => {
-      console.log(data.data.user + ": " + data.id)
         displayPost(data)
     })
 
     function displayPost(data) {
-        let authorClass = ""
-      let divClass = ""
-      if (data.id === ID) {
-          console.log("This person made a post")
-        authorClass = "me"
-        divClass = "myDiv"
-      } else {
-        authorClass = "you"
-        divClass = "yourDiv"
-      }
+        let authorClass = "post"
       const div = document.createElement("div")
       div.className = "postDiv";
+      div.id = "post-" + pIndex++
       const li = document.createElement("li")
       div.innerHTML =
         '<p class="' +
@@ -81,31 +69,30 @@
         data.data.value +
         "</p>" + 
         "<hr style= 'border: 1.5px solid black'>" +
-        "<ul id='comments'></ul>" +
-        "<form>" + 
-          "<input type='text' id='postComment' />" + 
-          "<input type='button' id='commentButton' value='submit' />" +
-        "</form>";
+        "<ul id='comments"+cIndex+"'></ul>" +
+          "<input type='text' id='postComment-"+ cIndex++ +"' class='commentText' />" + 
+          "<input type='button' id='commentButton-"+ bIndex++ +"' value='submit' />";
       li.appendChild(div)
 
       document.getElementById("posts").appendChild(li)
       window.scrollTo(0, document.body.scrollHeight)
 
-    }
-
-    document
+      document.getElementById('commentButton-' + (cIndex-1).toString())
       .addEventListener("click", function (event) {
-        if (event.target && event.target.id == "commentButton") {
+        const x = cIndex-1
           console.log("clicked!")
         socket.emit("comment", {
-          value: document.getElementById("postComment").value,
+          value: document.getElementById("postComment-" + parentCalc(event.target.id.toString()).toString()).value,
           user: userName,
+          btnId: event.target.id.toString()
         
         })
-        document.getElementById("postComment").value = "" 
-        }
+        document.getElementById("postComment-" + parentCalc(event.target.id.toString()).toString()).value = "" 
 
       })
+
+    }
+
 
       socket.on("comment", (data) => {
       console.log(data.data.user + ": " + data.id)
@@ -113,18 +100,9 @@
     })
 
     function displayComment(data) {
-        let authorClass = ""
-      let divClass = ""
-      if (data.id === ID) {
-        authorClass = "me"
-        divClass = "myDiv"
-      } else {
-        authorClass = "you"
-        divClass = "yourDiv"
-      }
+        let authorClass = "me"
+
       const div = document.createElement("div")
-      div.className = divClass;
-      const li = document.createElement("li")
       div.innerHTML =
         '<p class="' +
         authorClass +
@@ -134,10 +112,19 @@
         '<p class="message"> ' +
         data.data.value +
         "</p>";
-      li.appendChild(div)
 
-      document.getElementById("comments").appendChild(li)
+      document.getElementById("comments" + parentCalc(data.data.btnId).toString()).appendChild(div)
       window.scrollTo(0, document.body.scrollHeight)
+    }
+
+    function parentCalc(data) {
+      var x = 0
+      for (let index = 0; index <= pIndex; index++) {
+        if (data == "commentButton-" + index.toString()) {
+           x = index
+        }
+      }
+      return x
     }
 
     document.getElementById("nav01").innerHTML =
