@@ -14,4 +14,9 @@ function printComments() {
     console.log(comments)
 }
 
-module.exports ={addComment, printComments}
+function getComments() {
+    return comments
+}
+
+
+module.exports ={addComment, printComments, getComments}

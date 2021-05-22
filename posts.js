@@ -22,4 +22,9 @@ function removePost(id) {
 function printPosts() {
     console.log(posts)
 }
-module.exports ={addPost, removePost, printPosts}
+
+function getPosts() {
+    return posts
+}
+
+module.exports ={addPost, removePost, printPosts, getPosts}
