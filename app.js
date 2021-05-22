@@ -4,18 +4,22 @@ var io = require("socket.io")(http)
 var mysql = require("mysql")
 const {addUser, removeUser} = require('./users')
 const {addPost, removePost} = require('./posts')
+const {addComment} = require('./comments')
+const {fetchComments, fecthPosts} = require('./fetcher')
 
 var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'admin',
+  database: 'acalinum'
 })
 con.connect(function(err) {
   if (err) {
     return console.error('error: ' + err.message);
   }
-
-  console.log('Connected to the MySQL server.');
+  console.log("Connected to database!")
+  fecthPosts(con)
+  fetchComments(con)
 });
 
 app.get("/", function (req, res) {
@@ -28,9 +32,10 @@ app.get("/post", function (req, res) {
   res.sendFile(__dirname + "/post.html")
 })
 
+
 let thisRoom = ""
 io.on("connection", function (socket) {
-  console.log("connected")
+
 
   socket.on("join room", (data) => {
     console.log("in room")
@@ -49,11 +54,30 @@ io.on("connection", function (socket) {
 
 
   socket.on("post", (data) => {
-    let newPost = addPost(data.value, data.user, data.id)
+    let newPost = addPost(data.id, data.value, data.user)
     console.log(newPost)
+
+      var sql = "INSERT INTO posts (id, message, username) VALUES" +
+      "("+ mysql.escape(data.id)  +", " + mysql.escape(data.value) +", "+ mysql.escape(data.user) +")";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Post inserted into database");
+      });
+
+    
     io.sockets.emit("post", {data : data, id : socket.id})
   })
   socket.on("comment", (data) => {
+    let newComment = addComment(data.btnId, data.value, data.user)
+    console.log(newComment)
+
+    var sql = "INSERT INTO comments (id, message, username) VALUES" +
+      "("+ mysql.escape(data.btnId)  +", " + mysql.escape(data.value) +", "+ mysql.escape(data.user) +")";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Comment inserted into database");
+      });
+
     io.sockets.emit("comment", {data : data, id : socket.id})
   })
 

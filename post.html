@@ -84,7 +84,7 @@
         socket.emit("comment", {
           value: document.getElementById("postComment-" + parentCalc(event.target.id.toString()).toString()).value,
           user: userName,
-          btnId: event.target.id.toString()
+          btnId: parentCalc(event.target.id.toString())
         
         })
         document.getElementById("postComment-" + parentCalc(event.target.id.toString()).toString()).value = "" 
@@ -113,7 +113,7 @@
         data.data.value +
         "</p>";
 
-      document.getElementById("comments" + parentCalc(data.data.btnId).toString()).appendChild(div)
+      document.getElementById("comments" + data.data.btnId.toString()).appendChild(div)
       window.scrollTo(0, document.body.scrollHeight)
     }
 

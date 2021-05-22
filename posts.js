@@ -1,6 +1,6 @@
 let posts = []
 
-function addPost(message, userName, id) {
+function addPost(id, message, userName) {
     const post = {
         message: message,
         username: userName,
@@ -11,11 +11,15 @@ function addPost(message, userName, id) {
 }
 
 function removePost(id) {
-    const getID = posts => posts.postID === id
+    const getID = posts => posts.ID === id
     const index = posts.findIndex(getID)
     if (index !== -1) {
         return posts.splice(index, 1)[0]
     }
     
 }
-module.exports ={addPost, removePost}
+
+function printPosts() {
+    console.log(posts)
+}
+module.exports ={addPost, removePost, printPosts}
