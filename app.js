@@ -4,8 +4,8 @@ var http = require("http").createServer(app)
 var io = require("socket.io")(http)
 var mysql = require("mysql")
 const {addUser, removeUser} = require('./users')
-const {addPost, removePost} = require('./posts')
-const {addComment} = require('./comments')
+const {addPost, getPosts} = require('./posts')
+const {addComment, getComments} = require('./comments')
 const {fetchComments, fecthPosts} = require('./fetcher')
 
 var con = mysql.createConnection({
@@ -54,6 +54,12 @@ io.on("connection", function (socket) {
 
   socket.on("chat message", (data) => {
     io.to(thisRoom).emit("chat message", {data : data, id : socket.id})
+  })
+
+  socket.on("open posts", (data) => {
+    
+    socket.emit("send post data", {posts: getPosts(), comments: getComments()})
+
   })
 
 
