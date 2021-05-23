@@ -5,15 +5,22 @@
   "main": "app.js",
   "dependencies": {
     "browserify": "^17.0.0",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "express": "^4.17.1",
     "expresss": "^0.0.0",
+    "fast-check": "^2.14.0",
+    "forever-monitor": "^3.0.3",
+    "mocha": "^8.4.0",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "socket.io": "^4.1.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "artillery": "^1.6.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

@@ -39,7 +39,7 @@ app.get("/post", function (req, res) {
 
 let thisRoom = ""
 io.on("connection", function (socket) {
-
+  console.log("new socket connected: " + socket.id);
 
   socket.on("join room", (data) => {
     console.log("in room")
