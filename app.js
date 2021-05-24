@@ -53,7 +53,7 @@ io.on("connection", function (socket) {
   })
 
   socket.on("chat message", (data) => {
-    io.to(thisRoom).emit("chat message", {data : data, id : socket.id})
+    io.to(data.roomName).emit("chat message", {data : data, id : socket.id})
     console.log(thisRoom)
   })
 

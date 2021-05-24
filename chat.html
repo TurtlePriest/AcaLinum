@@ -52,7 +52,7 @@
         socket.emit("chat message", {
           value: document.getElementById("message").value,
           user: userName,
-        
+          roomName : room
         })
 
         document.getElementById("message").value = ""

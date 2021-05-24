@@ -34,7 +34,7 @@ after(() => { if (child.running) child.stop() });
 
 
 
-describe('Does the routes respond with html?', () => {
+describe('Do the routes respond with html?', () => {
 
     it('GET /', () =>
         chai.request('http://localhost:3000')
@@ -90,7 +90,7 @@ describe('Chat system tests', () => {
             client2.on('connect', function () {
 
                 client2.emit('join room', { username: "Mads", roomName: room });
-                client2.emit('chat message', { value: "test", user: "Mads", });
+                client2.emit('chat message', { value: "test", user: "Mads", roomName: room });
             });
 
         });
@@ -114,7 +114,7 @@ describe('Chat system tests', () => {
                 client3.emit('join room', { username: "Jacob", roomName: "other room" });
 
                 client3.on('connect', function () {
-                    client1.emit('chat message', { value: "test", user: "Lukas", });
+                    client1.emit('chat message', { value: "test", user: "Lukas", roomName: room });
                 });
 
                 client3.on('chat message', function () {
