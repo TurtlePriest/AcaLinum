@@ -14,7 +14,8 @@
     "mocha": "^8.4.0",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.1.2",
+    "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
     "artillery": "^1.6.2"

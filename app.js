@@ -45,15 +45,16 @@ io.on("connection", function (socket) {
     console.log("in room")
     let newUser = addUser(socket.id, data.username, data.roomName)
     
-    socket.emit("send data", {id : socket.id, username : newUser.userName, roomname : newUser.roomName})
+    socket.emit("send data", {id : socket.id, username : newUser.username, roomname : newUser.roomname})
 
-    thisRoom = newUser.roomName
+    thisRoom = newUser.roomname
     console.log(newUser)
-    socket.join(newUser.roomName)
+    socket.join(newUser.roomname)
   })
 
   socket.on("chat message", (data) => {
     io.to(thisRoom).emit("chat message", {data : data, id : socket.id})
+    console.log(thisRoom)
   })
 
   socket.on("open posts", (data) => {
