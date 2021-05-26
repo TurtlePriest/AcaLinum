@@ -1,0 +1,20 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 150
+      arrivalRate: 7
+  engines:
+    socketio-v3: {}
+
+
+
+scenarios:
+  - name: connect
+    engine: socketio-v3
+    flow:    
+      - emit: ["connection"]
+      - emit: ["join room", "john doe", "test"]
+      - loop:
+        - emit: ["chat message", "Hello", "John Doe", "test"]
+        - think: 2
+        count: 25

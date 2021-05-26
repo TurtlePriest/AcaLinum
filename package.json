@@ -18,7 +18,8 @@
     "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
-    "artillery": "^1.6.2"
+    "artillery": "^1.6.2",
+    "artillery-engine-socketio-v3": "^1.0.1"
   },
   "scripts": {
     "test": "mocha"
