@@ -3,10 +3,10 @@ var app = express()
 var http = require("http").createServer(app)
 var io = require("socket.io")(http)
 var mysql = require("mysql")
-const {addUser, removeUser} = require('./users')
-const {addPost, getPosts} = require('./posts')
-const {addComment, getComments} = require('./comments')
-const {fetchComments, fecthPosts} = require('./fetcher')
+const {addUser, removeUser} = require('./Scripts/users')
+const {addPost, getPosts} = require('./Scripts/posts')
+const {addComment, getComments} = require('./Scripts/comments')
+const {fetchComments, fecthPosts} = require('./Scripts/fetcher')
 
 var con = mysql.createConnection({
   host: 'localhost',
@@ -27,13 +27,13 @@ con.connect(function(err) {
 app.use("/static", express.static('./static/'));
 
 app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/index.html")
+  res.sendFile(__dirname + "/Html/index.html")
 })
 app.get("/chat", function (req, res) {
-  res.sendFile(__dirname + "/chat.html")
+  res.sendFile(__dirname + "/Html/chat.html")
 })
 app.get("/post", function (req, res) {
-  res.sendFile(__dirname + "/post.html")
+  res.sendFile(__dirname + "/Html/post.html")
 })
 
 
